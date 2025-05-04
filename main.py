@@ -1,4 +1,4 @@
-import openai
+import pip install openai==0.28
 import os
 
 # OpenAIのAPIキーを読み込む
