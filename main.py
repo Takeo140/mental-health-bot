@@ -17,7 +17,8 @@ response = openai.ChatCompletion.create(
 )
 
 # 結果を取得し、message変数に格納
-message = response.choices[0].message["content"]
+message = response.choices[0].message.content
+
 
 # 結果を表示
 print(message)
