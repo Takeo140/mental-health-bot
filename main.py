@@ -1,5 +1,7 @@
 import openai
 import os
+import tweepy
+import facebook
 
 # OpenAIのAPIキーを読み込む
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -14,8 +16,11 @@ response = openai.ChatCompletion.create(
   max_tokens=200
 )
 
+# 結果を取得し、message変数に格納
+message = response.choices[0].message["content"]
+
 # 結果を表示
-print(response.choices[0].message["content"])
+print(message)
 
 # --- X（旧Twitter）への投稿設定 ---
 consumer_key = os.getenv("TWITTER_API_KEY")
