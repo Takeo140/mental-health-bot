@@ -1,27 +1,33 @@
-import openai
 import os
+import requests
 import tweepy
 import facebook
 
-# OpenRouterのAPI設定
-openai.api_key = "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"
-openai.base_url = "https://openrouter.ai/api/v1"
+# --- APIキー・エンドポイント設定 ---
+openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+openrouter_url = "https://openrouter.ai/api/v1/chat/completions"
 
-# AIに啓発メッセージを作らせる
-response = openai.chat.completions.create(
-  model="meta-llama/llama-4-maverick:free",
-  messages=[
-    {"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
-    {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}
-  ],
-  max_tokens=200
-)
+# --- AIに啓発メッセージを作らせる ---
+headers = {
+    "Authorization": f"Bearer {openrouter_api_key}",
+    "Content-Type": "application/json"
+}
 
-# 結果を取得し、message変数に格納
-message = response.choices[0].message.content
+data = {
+    "model": "meta-llama/llama-4-maverick:free",
+    "messages": [
+        {"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
+        {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}
+    ],
+    "max_tokens": 200
+}
 
-# 結果を表示
-print(message)
+response = requests.post(openrouter_url, headers=headers, json=data)
+result = response.json()
+
+# 結果を取得
+message = result['choices'][0]['message']['content']
+print("AIメッセージ:", message)
 
 # --- X（旧Twitter）への投稿設定 ---
 consumer_key = os.getenv("TWITTER_API_KEY")
