@@ -1,22 +1,21 @@
+import openai
 import os
-from openai import OpenAI
-import tweepy
-import facebook
 
-# OpenAIクライアント設定
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# OpenAIのAPIキーを読み込む
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # AIに啓発メッセージを作らせる
-response = client.chat.completions.create(
-    model="gpt-4",
-    messages=[
-        {"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
-        {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}
-    ],
-    max_tokens=200
+response = openai.ChatCompletion.create(
+  model="gpt-3.5-turbo",  # gpt-4 ではなく gpt-3.5-turbo を使用
+  messages=[
+    {"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
+    {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}
+  ],
+  max_tokens=200
 )
 
-message = response.choices[0].message.content
+# 結果を表示
+print(response.choices[0].message["content"])
 
 # --- X（旧Twitter）への投稿設定 ---
 consumer_key = os.getenv("TWITTER_API_KEY")
