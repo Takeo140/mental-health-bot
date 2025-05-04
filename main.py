@@ -1,4 +1,4 @@
-import openai
+import openai>=1.0.0
 import os
 
 # OpenAIのAPIキーを読み込む
