@@ -1,9 +1,10 @@
 import os
 from openai import OpenAI
+import tweepy
+import facebook
 
-# OpenAIのAPIキーを読み込む
-api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
+# OpenAIクライアント設定
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # AIに啓発メッセージを作らせる
 response = client.chat.completions.create(
@@ -15,5 +16,21 @@ response = client.chat.completions.create(
     max_tokens=200
 )
 
-# 結果を表示
-print(response.choices[0].message.content)
+message = response.choices[0].message.content
+
+# --- X（旧Twitter）への投稿設定 ---
+consumer_key = os.getenv("TWITTER_API_KEY")
+consumer_secret = os.getenv("TWITTER_API_SECRET")
+access_token = os.getenv("TWITTER_ACCESS_TOKEN")
+access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+
+auth = tweepy.OAuth1UserHandler(consumer_key, consumer_secret, access_token, access_token_secret)
+twitter_api = tweepy.API(auth)
+twitter_api.update_status(message)
+print("Xに投稿完了")
+
+# --- Facebookへの投稿設定 ---
+fb_access_token = os.getenv("FACEBOOK_ACCESS_TOKEN")
+graph = facebook.GraphAPI(access_token=fb_access_token)
+graph.put_object(parent_object='me', connection_name='feed', message=message)
+print("Facebookに投稿完了")
