@@ -3,13 +3,13 @@ import os
 import tweepy
 import facebook
 
-# OpenRouterのAPIキーを読み込む
+# OpenRouterのAPI設定
 openai.api_key = os.getenv("OPENROUTER_API_KEY")
-openai.api_base = "https://openrouter.ai/api/v1"
+openai.base_url = "https://openrouter.ai/api/v1"
 
 # AIに啓発メッセージを作らせる
-response = openai.ChatCompletion.create(
-  model="meta-llama/llama-4-maverick:free",  # 無料版LLaMA4
+response = openai.chat.completions.create(
+  model="meta-llama/llama-4-maverick:free",
   messages=[
     {"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
     {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}
