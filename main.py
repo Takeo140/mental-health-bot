@@ -1,4 +1,6 @@
-import openai==0.28.1
+import openai
+import os
+
 # OpenAIのAPIキーを読み込む
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
