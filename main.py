@@ -4,7 +4,8 @@ import tweepy
 import facebook
 
 # OpenRouterのAPI設定
-openai.api_key = "sk-or-v1-f3b89c6d484a530b2796f9480757ca1cfde732d514883f261a8715b6dcce62ccopenai.base_url = "https://openrouter.ai/api/v1"
+openai.api_key = "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"
+openai.base_url = "https://openrouter.ai/api/v1"
 
 # AIに啓発メッセージを作らせる
 response = openai.chat.completions.create(
