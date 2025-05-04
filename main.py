@@ -1,5 +1,4 @@
-import pip install openai==0.28
-import os
+import pip install --upgrade openaiimport os
 
 # OpenAIのAPIキーを読み込む
 openai.api_key = os.getenv("OPENAI_API_KEY")
