@@ -1,0 +1,27 @@
+name: Daily AI Post
+
+on:
+  schedule:
+    - cron: "0 1,5,9,13,17 * * *"  # 1日5回 (UTC時間で設定、日本なら+9時間)
+  workflow_dispatch:  # 手動実行もできる
+
+jobs:
+  post-message:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run AI Message Bot
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python main.py
