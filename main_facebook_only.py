@@ -7,19 +7,11 @@ api_key = os.getenv("OPENROUTER_API_KEY")
 if not api_key:
     raise Exception("OpenRouter APIキーが設定されていません。")
 
-headers = {
-    "Authorization": f"token {api_key}",
-    "Content-Type": "application/json"
-}
+headers = {"Authorization": f"token {api_key}", "Content-Type": "application/json"}
 
-data = {
-    "model": "meta-llama/llama-4-maverick:free",
-    "messages": [
-        {"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
-        {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}
-    ],
-    "max_tokens": 200
-}
+data = {"model": "meta-llama/llama-4-maverick:free",
+    "messages": [{"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
+        {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}], "max_tokens": 200}
 
 response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=data)
 
