@@ -2,7 +2,7 @@ name: Post Mental Health Message
 
 on:
   schedule:
-    - cron: '0 3,7,11,15,19,23 * * *'  # 日本時間の0,4,8,12,16,20時に実行
+    - cron: '0 3,7,11,15,19,23 * * *'
   workflow_dispatch:
 
 jobs:
@@ -11,10 +11,6 @@ jobs:
 
     env:
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-      TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
-      TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
-      TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-      TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
       FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
 
     steps:
@@ -29,7 +25,7 @@ jobs:
     - name: 📦 依存パッケージをインストール
       run: |
         pip install --upgrade pip
-        pip install openai tweepy facebook-sdk requests
+        pip install facebook-sdk requests
 
-    - name: 📝 メッセージ投稿スクリプトを実行
-      run: python main.py
+    - name: 📝 Facebook用メッセージ投稿スクリプトを実行
+      run: python main_facebook_only.py
