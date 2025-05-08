@@ -1,34 +1,45 @@
 import os
 import requests
-import facebook
+import json
 
-# OpenRouterのAPI設定
-api_key = os.getenv("OPENROUTER_API_KEY")
-if not api_key:
-    raise Exception("OpenRouter APIキーが設定されていません。")
+# OpenRouterのAPIキーを読み込む
+openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
 
-headers = {"Authorization": f"token {api_key}", "Content-Type": "application/json"}
+# OpenRouterのエンドポイント
+openrouter_url = "https://openrouter.ai/api/v1/chat/completions"
 
-data = {"model": "meta-llama/llama-4-maverick:free",
-    "messages": [{"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
-        {"role": "user", "content": "100文字程度のメッセージを1つ作って。"}], "max_tokens": 200}
+# メッセージ作成リクエスト
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {openrouter_api_key}"}
 
-response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=data)
+data = { "model": "openai/gpt-3.5-turbo",  # 必要なら他のモデルにも変更可
+    "messages": [ {"role": "system", "content": "あなたは精神保健福祉の専門家です。患者の人権向上について啓発メッセージを考えてください。"},
+        {"role": "user", "content": "100文字程度のメッセージを1つ作って。"} ],"max_tokens": 200}
 
-if response.status_code != 200:
-    raise Exception(f"APIエラー: {response.status_code}\n{response.text}")
+# メッセージ生成
+response = requests.post(openrouter_url, headers=headers, data=json.dumps(data))
 
-result = response.json()
-message = result['choices'][0]['message']['content']
+if response.status_code == 200:
+    message = response.json()["choices"][0]["message"]["content"]
+    print(f"作成メッセージ: {message}")
+else:
+    print(f"OpenRouterエラー: {response.status_code}, {response.text}")
+    exit()
 
-print("生成メッセージ:")
-print(message)
+# --- LINEへのブロードキャスト送信設定 ---
+line_api_url = 'https://api.line.me/v2/bot/message/broadcast'
+line_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 
-# Facebookへの投稿設定
-fb_access_token = os.getenv("FACEBOOK_ACCESS_TOKEN")
-if not fb_access_token:
-    raise Exception("Facebookアクセストークンが設定されていません。")
+line_headers = { 'Content-Type': 'application/json',
+    'Authorization': f'Bearer {line_access_token}'}
 
-graph = facebook.GraphAPI(access_token=fb_access_token)
-graph.put_object(parent_object='me', connection_name='feed', message=message)
-print("Facebookに投稿完了")
+payload = {'messages': [ { 'type': 'text','text': message  } ]}
+
+line_response = requests.post(line_api_url, headers=line_headers, data=json.dumps(payload))
+
+# 結果確認
+if line_response.status_code == 200:
+    print("LINEブロードキャスト送信完了")
+else:
+    print(f"LINE送信失敗: {line_response.status_code}, {line_response.text}")
