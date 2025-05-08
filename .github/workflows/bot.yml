@@ -11,7 +11,7 @@ jobs:
 
     env:
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-      FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
+      LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
 
     steps:
     - name: 📥 リポジトリをチェックアウト
@@ -25,7 +25,7 @@ jobs:
     - name: 📦 依存パッケージをインストール
       run: |
         pip install --upgrade pip
-        pip install facebook-sdk requests
+        pip install requests
 
-    - name: 📝 Facebook用メッセージ投稿スクリプトを実行
-      run: python main_facebook_only.py
+    - name: 📝 LINEブロードキャストメッセージ投稿スクリプトを実行
+      run: python main_line_broadcast.py
