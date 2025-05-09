@@ -14,8 +14,8 @@ headers = {
     "Authorization": f"Bearer {openrouter_api_key}"}
 
 data = { "model": "openai/gpt-3.5-turbo",  # 必要なら他のモデルにも変更可
-    "messages": [ {"role": "system", "content": "あなたは精神保健の専門家です。メンタルヘルス向上について啓発メッセージを考えてください。"},
-        {"role": "user", "content": "100文字程度のメッセージを1つ作って。"} ],"max_tokens": 200}
+    "messages": [ {"role": "system", "content": "あなたはメンタルヘルスの専門家です。メンタルヘルス向上について啓発メッセージを考えてください。"},
+        {"role": "user", "content": "70文字程度のメッセージを1つ作って。"} ],"max_tokens": 200}
 
 # メッセージ生成
 response = requests.post(openrouter_url, headers=headers, data=json.dumps(data))
