@@ -2,7 +2,7 @@ name: Post Mental Health Message to X
 
 on:
   schedule:
-    - cron: '0 3,7,11,15,19,23 * * *'
+    - cron: '0 7,11,15,19,23 * * *'
   workflow_dispatch:
 
 jobs:
@@ -17,18 +17,18 @@ jobs:
       TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
 
     steps:
-    - name: 📥 リポジトリをチェックアウト
-      uses: actions/checkout@v4
+      - name: 📥 リポジトリをチェックアウト
+        uses: actions/checkout@v4
 
-    - name: 🐍 Python環境をセットアップ
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: 🐍 Python環境セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: 📦 依存パッケージをインストール
-      run: |
-        pip install --upgrade pip
-        pip install requests requests-oauthlib
+      - name: 📦 依存パッケージインストール
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: 📝 X(Twitter)投稿スクリプトを実行
-      run: python main_twitter_post.py
+      - name: 📝 メンタルヘルスメッセージ投稿実行
+        run: python main_twitter_post.py
